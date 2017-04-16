@@ -1,0 +1,16 @@
+CREATING LOADBALANCER, HEALTH CHECK AND REGISTERING INSATNCES.
+
+1.(Optional)You can’t clone existing Loadbalancer, however you can match the values of the existing load balancer and create it in new LB.
+Describing the existing load balancer in JSON and exporting it to Desktop as a text file.
+
+aws elb describe-load-balancers --load-balancer-name Existing_LB_Name > ~/Desktop/Existing_LB_Name.txt
+
+2.Creating Load Balancer, replace the Load balancer name with new LB name and set values from Existing_LB_Name.
+aws elb create-load-balancer --load-balancer-name New_LB_Name --listeners "Protocol=HTTPS,LoadBalancerPort=443,InstanceProtocol=HTTPS,InstancePort=443",SSLCertificateId=arn:partition:service:region:account-id:resource" --subnets subnet-e*@m9l3 --security-groups sg-Y0urSG 
+
+3.Health Check on the Load Balancer.
+aws elb configure-health-check --load-balancer-name New_LB_Name --health-check Target=HTTPS:443/elb-status,Interval=20,UnhealthyThreshold=3,HealthyThreshold=2,Timeout=10 
+
+4.Registering instances to the Loadbalancer.
+aws elb register-instances-with-load-balancer --load-balancer-name New_LB_Name --instances instance-id
+
