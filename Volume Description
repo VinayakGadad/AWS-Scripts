@@ -1,0 +1,1 @@
+aws ec2 describe-volumes --volume-ids --profile `PROFILE` $(aws ec2 describe-instances --instance-ids "$instance_id"|jq -r '.Reservations[].Instances[].BlockDeviceMappings[].Ebs.VolumeId'|tr '\n' ' ')|jq -r '.Volumes[]| "\(.Attachments[].InstanceId) \(.Attachments[].Device) \(.VolumeId) \(.Size)GB Encrypted?:\(.Encrypted)"'
