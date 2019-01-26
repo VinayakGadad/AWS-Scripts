@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# This script helps to check that status of the snapshot % completion. Replace the AMI id below.
+
+imageID=ami-00exampl31243
+
+for i in $(aws ec2 describe-images --image-ids "$imageID" --output json | jq -r '.Images[].BlockDeviceMappings[].Ebs.SnapshotId');
+do
+	aws ec2 describe-snapshots --snapshot-id $i
+	status=$(aws ec2 describe-snapshots --snapshot-id $i --output json | jq -r '.Snapshots[].Progress')
+	echo "The status of the above snapshots is $status"
+done
+
+
