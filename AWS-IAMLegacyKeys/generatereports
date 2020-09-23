@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Author Vinayak Gadad
+#
+
+printf "\nEnter the aws profile you want to generate report:"
+read PROFILE
+if [[ -z $PROFILE ]]; then
+   echo "Profile name not mentioned, assuming Default"
+fi
+
+echo "Genrating the report for the $PROFILE environment"
+aws iam generate-credential-report --profile $PROFILE
+aws iam get-credential-report --profile $PROFILE --output text --query Content | base64 -D > AWS-$PROFILE-CredentialReport-$(date +%Y-%m-%d).csv
+
