@@ -13,13 +13,15 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
-  build:
+  release:
+    name: Perform the Release
     runs-on: macos-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Run
-        run: pod --help && which pod
-        
+
+      - name: Publish to CocoaPods
+        run: pod trunk push Test.podspec
